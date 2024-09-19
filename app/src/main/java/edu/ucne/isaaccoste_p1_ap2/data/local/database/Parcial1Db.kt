@@ -10,6 +10,6 @@ import edu.ucne.isaaccoste_p1_ap2.data.local.entities.AlgoEntity
     exportSchema = false,
     entities = [AlgoEntity::class]
 )
-abstract class Parcial1DB: RoomDatabase() {
-    abstract val algoDao: AlgoDao
+abstract class Parcial1Db: RoomDatabase() {
+    abstract fun algoDao(): AlgoDao
 }
