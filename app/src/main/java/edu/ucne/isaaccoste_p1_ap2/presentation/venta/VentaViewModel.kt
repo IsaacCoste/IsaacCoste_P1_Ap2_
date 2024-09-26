@@ -51,6 +51,7 @@ class VentaViewModel @Inject constructor(
                 descuentoGalon = 0.0,
                 precio = 0.0,
                 totalDescuento = 0.0,
+                total = 0.0
             )
         }
     }
@@ -86,6 +87,17 @@ class VentaViewModel @Inject constructor(
             }
         }
     }
+    fun updateTotalValues() {
+        _uiState.update { venta ->
+            val newTotalDescuento = venta.galones * venta.descuentoGalon
+            val newTotal = (venta.precio * venta.galones) - newTotalDescuento
+
+            venta.copy(
+                totalDescuento = newTotalDescuento,
+                total = newTotal
+            )
+        }
+    }
 
     fun onVentaIdChange (ventaId: Int) {
         _uiState.update {
@@ -97,20 +109,25 @@ class VentaViewModel @Inject constructor(
             it.copy(DatoCliente = DatoCliente)
         }
     }
-    fun onGalonesChange (galones: Double) {
+    fun onGalonesChange(galones: Double) {
         _uiState.update {
             it.copy(galones = galones)
         }
+        updateTotalValues()
     }
-    fun onDescuentoGalonChange (descuentoGalon: Double) {
+
+    fun onDescuentoGalonChange(descuentoGalon: Double) {
         _uiState.update {
             it.copy(descuentoGalon = descuentoGalon)
         }
+        updateTotalValues()
     }
-    fun onPrecioChange (precio: Double) {
+
+    fun onPrecioChange(precio: Double) {
         _uiState.update {
             it.copy(precio = precio)
         }
+        updateTotalValues()
     }
     fun onTotalDescuentoChange (totalDescuento: Double) {
         _uiState.update {
