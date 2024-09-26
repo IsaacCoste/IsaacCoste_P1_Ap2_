@@ -26,6 +26,6 @@ object AppModule {
 
 @Provides
 @Singleton
-fun provideAlgoDao(parcial1Db: Parcial1Db) = parcial1Db.algoDao()
+fun provideAlgoDao(parcial1Db: Parcial1Db) = parcial1Db.ventaDao()
 
 }
