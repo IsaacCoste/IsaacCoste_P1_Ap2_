@@ -47,6 +47,9 @@ fun VentaScreeen(
         if (isEditMode) {
             viewModel.select(VentaId)
         }
+        else {
+            viewModel.select(VentaId)
+        }
     }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     ventaBodyScreen(
@@ -100,22 +103,32 @@ fun ventaBodyScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(1.dp),
                 label = { Text("Datos del Cliente") },
                 value = uiState.DatoCliente,
                 onValueChange = onDatoClienteChange
             )
+            uiState.errorDatoCliente?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             var isEditing by remember { mutableStateOf(false) }
 
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(5.dp)
                     .onFocusChanged { focusState ->
                         isEditing = focusState.isFocused
                     },
                 label = { Text("Galones") },
-                value = if (isEditing || uiState.galones != 0.0) uiState.galones.toString() else "",
+                value = if (uiState.galones != 0.0) uiState.galones.toString() else "",
                 onValueChange = { newValue ->
                     val galones = newValue.toDoubleOrNull() ?: 0.0
                     onGalonesChange(galones)
@@ -123,15 +136,25 @@ fun ventaBodyScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
+            uiState.errorGalones?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(5.dp)
                     .onFocusChanged { focusState ->
                         isEditing = focusState.isFocused
                     },
                 label = { Text("Descuento por galón") },
-                value = if (isEditing || uiState.descuentoGalon != 0.0) uiState.descuentoGalon.toString() else "",
+                value = if (uiState.descuentoGalon != 0.0) uiState.descuentoGalon.toString() else "",
                 onValueChange = { newValue ->
                     val descGalones = newValue.toDoubleOrNull() ?: 0.0
                     onDescuentoGalonChange(descGalones)
@@ -139,15 +162,25 @@ fun ventaBodyScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
+            uiState.errorDescuentoGalon?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(5.dp)
                     .onFocusChanged { focusState ->
                         isEditing = focusState.isFocused
                     },
                 label = { Text("Precio") },
-                value = if (isEditing || uiState.precio != 0.0) uiState.precio.toString() else "",
+                value = if (uiState.precio != 0.0) uiState.precio.toString() else "",
                 onValueChange = { newValue ->
                     val precio = newValue.toDoubleOrNull() ?: 0.0
                     onPrecioChange(precio)
@@ -155,15 +188,25 @@ fun ventaBodyScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
+            uiState.errorPrecio?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(5.dp)
                     .onFocusChanged { focusState ->
                         isEditing = focusState.isFocused
                     },
                 label = { Text("Total descuento") },
-                value = if (isEditing || uiState.totalDescuento != 0.0) uiState.totalDescuento.toString() else "",
+                value = if (uiState.totalDescuento != 0.0) uiState.totalDescuento.toString() else "",
                 readOnly = true,
                 onValueChange = { newValue ->
                     val totalDes = newValue.toDoubleOrNull() ?: 0.0
@@ -175,13 +218,13 @@ fun ventaBodyScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(5.dp)
                     .onFocusChanged { focusState ->
                         isEditing = focusState.isFocused
                     },
                 label = { Text("Total") },
                 readOnly = true,
-                value = if (isEditing || uiState.total != 0.0) uiState.total.toString() else "",
+                value = if (uiState.total != 0.0) uiState.total.toString() else "",
                 onValueChange = { newValue ->
                     val total = newValue.toDoubleOrNull() ?: 0.0
                     onTotalChange(total)
@@ -190,16 +233,7 @@ fun ventaBodyScreen(
                 singleLine = true
             )
             Spacer(modifier = Modifier.padding(8.dp))
-            uiState.errorMessager?.let {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(text = it, color = Color.Red)
-                }
-            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
