@@ -103,11 +103,21 @@ fun ventaBodyScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp),
+                    .padding(1.dp),
                 label = { Text("Datos del Cliente") },
                 value = uiState.DatoCliente,
                 onValueChange = onDatoClienteChange
             )
+            uiState.errorDatoCliente?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             var isEditing by remember { mutableStateOf(false) }
 
             OutlinedTextField(
@@ -126,6 +136,16 @@ fun ventaBodyScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
+            uiState.errorGalones?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -142,6 +162,16 @@ fun ventaBodyScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
+            uiState.errorDescuentoGalon?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,6 +188,16 @@ fun ventaBodyScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
+            uiState.errorPrecio?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(),
+                    horizontalArrangement = Arrangement.Absolute.Left
+                ) {
+                    Text(text = it, color = Color.Red)
+                }
+            }
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -193,16 +233,7 @@ fun ventaBodyScreen(
                 singleLine = true
             )
             Spacer(modifier = Modifier.padding(8.dp))
-            uiState.errorMessager?.let {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(text = it, color = Color.Red)
-                }
-            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
