@@ -21,26 +21,59 @@ class VentaViewModel @Inject constructor(
     init {
         getVentas()
     }
-    fun save () {
+
+    fun save() {
         viewModelScope.launch {
-            if (_uiState.value.DatoCliente.isNullOrBlank() ||
-                _uiState.value.galones <= 0.0 ||
-                _uiState.value.descuentoGalon < 0.0 ||
-                _uiState.value.precio <= 0.0){
-                _uiState.update {
-                    it.copy(errorMessager = "Todos los datos son necesarios para guardar el registro")
-                }
-            }
-            else if(_uiState.value.descuentoGalon > _uiState.value.precio){
-                _uiState.update {
-                    it.copy(errorMessager = "El descuento no puede ser mayor al precio")
-                }
-            }
-            else {
+            if (validate()) {
                 ventaRepository.save(_uiState.value.ToEntity())
                 nuevo()
             }
         }
+    }
+
+    private fun validate(): Boolean {
+        var isValid = true
+        if (_uiState.value.DatoCliente.isNullOrBlank()) {
+            _uiState.update {
+                it.copy(errorDatoCliente = "El nombre del cliente es obligatorio")
+            }
+            isValid = false
+        } else {
+            _uiState.update {
+                it.copy(errorDatoCliente = null)
+            }
+        }
+        if (_uiState.value.galones <= 0.0) {
+            _uiState.update {
+                it.copy(errorGalones = "El número de galones es obligatorio")
+            }
+            isValid = false
+        } else {
+            _uiState.update {
+                it.copy(errorGalones = null)
+            }
+        }
+        if (_uiState.value.descuentoGalon < 0.0 || _uiState.value.descuentoGalon >= _uiState.value.precio) {
+            _uiState.update {
+                it.copy(errorDescuentoGalon = "El descuento por galón no puede ser mayor al precio")
+            }
+            isValid = false
+        } else {
+            _uiState.update {
+                it.copy(errorDescuentoGalon = null)
+            }
+        }
+        if (_uiState.value.precio <= 0.0 || _uiState.value.precio < _uiState.value.descuentoGalon) {
+            _uiState.update {
+                it.copy(errorPrecio = "El precio es obligatorio y debe ser mayor que el descuento por galón")
+            }
+            isValid = false
+        } else {
+            _uiState.update {
+                it.copy(errorPrecio = null)
+            }
+        }
+        return isValid
     }
     fun nuevo() {
         _uiState.update {
@@ -77,6 +110,7 @@ class VentaViewModel @Inject constructor(
         viewModelScope.launch {
             ventaRepository.delete(_uiState.value.ToEntity())
         }
+        nuevo()
     }
     private fun getVentas() {
         viewModelScope.launch {
@@ -148,9 +182,12 @@ data class UiState(
     val galones: Double = 0.0,
     val descuentoGalon: Double = 0.0,
     val precio: Double = 0.0,
-    val totalDescuento: Double = galones * descuentoGalon,
-    val total: Double = (precio * galones) - totalDescuento,
-    val errorMessager: String? = null,
+    val totalDescuento: Double = 0.0,
+    val total: Double = 0.0,
+    val errorDatoCliente: String? = null,
+    val errorGalones: String? = null,
+    val errorDescuentoGalon: String? = null,
+    val errorPrecio: String? = null,
     val ventas: List<VentaEntity> = emptyList()
 )
 
